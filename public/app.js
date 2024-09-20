@@ -19,10 +19,20 @@ var lowNoteName = "";
 var range = -1;
 
 function tweet() {
-  text = `音域測定結果\n高音:${highNoteName}\n低音:${lowNoteName}\n音域:${range.toFixed(
-    1
-  )}オクターブ\nhttps://singer-tools.web.app/\n#音域測ったー`;
-  window.open("https://twitter.com/share?&text=" + encodeURIComponent(text));
+  if (navigator.share) {
+      try {
+          navigator.share({
+              title: '音域を測定してみました',
+              text: `音域測定結果\n高音:${highNoteName}\n低音:${lowNoteName}\n音域:${range.toFixed(1)}オクターブ\nhttps://singer-tools.web.app/\n#音域測ったー`,
+              url: window.location.href
+          });
+          console.log('コンテンツが正常にシェアされました。');
+      } catch (error) {
+          console.error('シェアに失敗しました:', error);
+      }
+  } else {
+    console.log('Web Share APIはこのブラウザでサポートされていません。');
+  }
 }
 
 function stopRec() {
